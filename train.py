@@ -111,7 +111,7 @@ if __name__ == '__main__':
     print("=" * 60)
 
     LOSS_DICT = {'Focal': FocalLoss(), 
-                 'Softmax': nn.CrossEntropyLoss()
+                 'Softmax': nn.CrossEntropyLoss(),
                  'AdaCos' : AdaCos(),
                  'AdaM_Softmax': AdaM_Softmax() ,
                  'ArcFace' : ArcFace() ,
@@ -120,8 +120,7 @@ if __name__ == '__main__':
                  'CurricularFace': CurricularFace(),
                  'MagFace' :  MagFace(),
                  'NPCFace' :  MV_Softmax.py(),
-                 'SST_Prototype' SST_Prototype(),
-                 
+                 'SST_Prototype': SST_Prototype()
                  }
     LOSS = LOSS_DICT[LOSS_NAME]
     print("=" * 60)
