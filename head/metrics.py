@@ -349,7 +349,7 @@ class AdaCos(nn.Module):
             theta_med = torch.median(theta[one_hot == 1])
             self.scale = torch.log(B_avg) / torch.cos(torch.min(math.pi/4 * torch.ones_like(theta_med), theta_med))
         output = self.scale * logits
-        return torch.nn.Softmax(output,labels)
+        return torch.nn.CrossEntropyLoss(output,labels)
 
 class AM_Softmax(Module):
     """Implementation for "Additive Margin Softmax for Face Verification"
