@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 import numpy as np
 from PIL import Image
-import bcolz
+from glob import glob
 import io
 import os
 
@@ -53,7 +53,7 @@ def make_weights_for_balanced_classes(images, nclasses):
 
 
 def get_val_pair(path, name):
-    carray = bcolz.carray(rootdir = os.path.join(path, name), mode = 'r')
+    carray = glob(os.path.join(path, name)+'/*')
     issame = np.load('{}/{}_list.npy'.format(path, name))
 
     return carray, issame
