@@ -351,7 +351,7 @@ class AdaCos(nn.Module):
         output = self.scale * logits
         return torch.nn.CrossEntropyLoss(output,labels)
 
-class AM_Softmax(Module):
+class AM_Softmax(nn.Module):
     """Implementation for "Additive Margin Softmax for Face Verification"
     """
     def __init__(self, feat_dim, num_class, margin=0.35, scale=32):
