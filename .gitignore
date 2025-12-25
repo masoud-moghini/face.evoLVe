@@ -2,7 +2,11 @@
 test
 config_f.py
 train_f.py
+<<<<<<< HEAD
 /.idea
 /data/
 */__pycache__
 __pycache__
+=======
+/.idea
+>>>>>>> a117c3f13fc77b9e26e1463b40238724675135e3
