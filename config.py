@@ -5,15 +5,9 @@ configurations = {
     1: dict(
         SEED = 1337, # random seed for reproduce results
 
-<<<<<<< HEAD
         DATA_ROOT = 'D:\\codes\\face.evoLVe\\data', # the parent root where your train/val/test data are stored
         MODEL_ROOT = '/d/codes/face.evoLVe/model', # the root to buffer your checkpoints
         LOG_ROOT = '/d/codes/face.evoLVe/log', # the root to log your train/val status
-=======
-        DATA_ROOT = '/content/data/data', # the parent root where your train/val/test data are stored
-        MODEL_ROOT = '/content/data/model', # the root to buffer your checkpoints
-        LOG_ROOT = '/content/data/log', # the root to log your train/val status
->>>>>>> a117c3f13fc77b9e26e1463b40238724675135e3
         BACKBONE_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
         HEAD_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
 
