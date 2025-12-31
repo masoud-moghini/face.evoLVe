@@ -190,12 +190,15 @@ if __name__ == '__main__':
                 warm_up_lr(batch + 1, NUM_BATCH_WARM_UP, LR, OPTIMIZER)
 
             # compute output
+            print(f"\nwarm up done device is :{DEVICE}\n")
             inputs = inputs.to(DEVICE)
             labels = labels.to(DEVICE).long()
+            print("labels to device done")
             features = BACKBONE(inputs)
+            print("features computed")
             outputs = HEAD(features, labels)
             loss = LOSS(outputs, labels)
-
+            print("loss computed")
             # measure accuracy and record loss
             prec1, prec5 = accuracy(outputs.data, labels, topk = (1, 5))
             losses.update(loss.data.item(), inputs.size(0))

@@ -5,9 +5,9 @@ configurations = {
     1: dict(
         SEED = 1337, # random seed for reproduce results
 
-        DATA_ROOT = 'D:\\codes\\face.evoLVe\\data', # the parent root where your train/val/test data are stored
-        MODEL_ROOT = '/d/codes/face.evoLVe/model', # the root to buffer your checkpoints
-        LOG_ROOT = '/d/codes/face.evoLVe/log', # the root to log your train/val status
+        DATA_ROOT = '/content/face.evoLVe/data', # the parent root where your train/val/test data are stored
+        MODEL_ROOT = '/content/face.evoLVe/model', # the root to buffer your checkpoints
+        LOG_ROOT = '/content/face.evoLVe/log', # the root to log your train/val status
         BACKBONE_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
         HEAD_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
 
@@ -19,7 +19,7 @@ configurations = {
         RGB_MEAN = [0.5, 0.5, 0.5], # for normalize inputs to [-1, 1]
         RGB_STD = [0.5, 0.5, 0.5],
         EMBEDDING_SIZE = 512, # feature dimension
-        BATCH_SIZE = 512,
+        BATCH_SIZE = 64,
         DROP_LAST = True, # whether drop the last batch to ensure consistent batch_norm statistics
         LR = 0.1, # initial LR
         NUM_EPOCH = 125, # total epoch number (use the firt 1/25 epochs to warm up)
@@ -28,8 +28,8 @@ configurations = {
         STAGES = [35, 65, 95], # epoch stages to decay learning rate
 
         DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
-        MULTI_GPU = True, # flag to use multiple GPUs; if you choose to train with single GPU, you should first run "export CUDA_VISILE_DEVICES=device_id" to specify the GPU card you want to use
-        GPU_ID = [0, 1, 2, 3], # specify your GPU ids
+        MULTI_GPU = False, # flag to use multiple GPUs; if you choose to train with single GPU, you should first run "export CUDA_VISILE_DEVICES=device_id" to specify the GPU card you want to use
+        GPU_ID = [0], # specify your GPU ids
         PIN_MEMORY = True,
         NUM_WORKERS = 0,
 ),
