@@ -112,13 +112,13 @@ if __name__ == '__main__':
 
     LOSS_DICT = {'Focal': FocalLoss(), 
                  'Softmax': nn.CrossEntropyLoss(),
-                 'AdaCos' : AdaCos(150,12),
+                 'AdaCos' : AdaCos(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
                  #'AdaM_Softmax': AdaM_Softmax() ,
-                 'ArcFace' : ArcFace(150,12,1) ,
-                 'ArcNegFace': ArcNegFace(150,12),
+                 'ArcFace' : ArcFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID) ,
+                 'ArcNegFace': ArcNegFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
                  #'CircleLoss': Circleloss(),
-                 'CurricularFace': CurricularFace(150,12),
-                 'MagFace' :  MagFace(150,12),
+                 'CurricularFace': CurricularFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
+                 'MagFace' :  MagFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
                  'NPCFace' :  MV_Softmax(150,12,False),
                  'SST_Prototype': SST_Prototype()
                  }
@@ -190,15 +190,12 @@ if __name__ == '__main__':
                 warm_up_lr(batch + 1, NUM_BATCH_WARM_UP, LR, OPTIMIZER)
 
             # compute output
-            print(f"\nwarm up done device is :{DEVICE}\n")
             inputs = inputs.to(DEVICE)
             labels = labels.to(DEVICE).long()
-            print("labels to device done")
             features = BACKBONE(inputs)
-            print("features computed")
             outputs = HEAD(features, labels)
             loss = LOSS(outputs, labels)
-            print("loss computed")
+            print(f'loss: {loss} outputs: {outputs}')
             # measure accuracy and record loss
             prec1, prec5 = accuracy(outputs.data, labels, topk = (1, 5))
             losses.update(loss.data.item(), inputs.size(0))
