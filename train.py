@@ -111,16 +111,16 @@ if __name__ == '__main__':
     print("=" * 60)
 
     LOSS_DICT = {'Focal': FocalLoss(), 
-                 'Softmax': nn.CrossEntropyLoss(),
-                 'AdaCos' : AdaCos(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
+                 #'Softmax': nn.CrossEntropyLoss(),
+                 #'AdaCos' : AdaCos(feat_dim = NUM_CLASS, num_classes = NUM_CLASS),
                  #'AdaM_Softmax': AdaM_Softmax() ,
-                 'ArcFace' : ArcFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID) ,
-                 'ArcNegFace': ArcNegFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
+                 'ArcFace' : ArcFace(in_features = NUM_CLASS, out_features = NUM_CLASS, device_id = GPU_ID) ,
+                 #'ArcNegFace': ArcNegFace(in_features = NUM_CLASS, out_features = NUM_CLASS, device_id = GPU_ID),
                  #'CircleLoss': Circleloss(),
-                 'CurricularFace': CurricularFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
-                 'MagFace' :  MagFace(in_features = EMBEDDING_SIZE, out_features = NUM_CLASS, device_id = GPU_ID),
-                 'NPCFace' :  MV_Softmax(150,12,False),
-                 'SST_Prototype': SST_Prototype()
+                 #'CurricularFace': CurricularFace(in_features = NUM_CLASS, out_features = NUM_CLASS, device_id = GPU_ID),
+                 #'MagFace' :  MagFace(in_features = NUM_CLASS, out_features = NUM_CLASS, device_id = GPU_ID),
+                 #'NPCFace' :  MV_Softmax(150,12,False),
+                 #'SST_Prototype': SST_Prototype()
                  }
     LOSS = LOSS_DICT[LOSS_NAME]
     print("=" * 60)
