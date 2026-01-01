@@ -193,8 +193,8 @@ if __name__ == '__main__':
             inputs = inputs.to(DEVICE)
             labels = labels.to(DEVICE).long()
             features = BACKBONE(inputs)
-            outputs = HEAD(features, labels)
-            loss = LOSS(outputs, labels)
+            _,outputs = HEAD(features, labels)
+            loss,_ = LOSS(outputs, labels)
             print(f'loss: {loss} outputs: {outputs}')
             # measure accuracy and record loss
             prec1, prec5 = accuracy(outputs.data, labels, topk = (1, 5))
