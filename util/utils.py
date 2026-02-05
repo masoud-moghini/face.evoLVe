@@ -192,7 +192,7 @@ def paths_to_bgr_tensors(img_paths):
             raise ValueError(f"Could not read image: {path}") # Convert HWC → CHW and to float32 
         tensor = torch.from_numpy(img).permute(2, 1, 0).float() 
         tensors.append(tensor) 
-        return tensors
+        return torch.stack(tensors)
 
 
 def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray, issame, nrof_folds = 10, tta = True):
