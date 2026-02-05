@@ -184,11 +184,18 @@ def gen_plot(fpr, tpr):
 
     return buf
 
+def paths_to_bgr_tensors(img_paths): 
+    tensors = [] 
+    for path in img_paths: 
+        img = cv2.imread(path) # OpenCV loads in BGR by default 
+        if img is None: 
+            raise ValueError(f"Could not read image: {path}") # Convert HWC → CHW and to float32 
+        tensor = torch.from_numpy(img).permute(2, 1, 0).float() 
+        tensors.append(tensor) 
+        return tensors
+
 
 def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray, issame, nrof_folds = 10, tta = True):
-    turn_to_tensor = lambda x: torch.from_numpy(cv2.imread(x))
-    carray_t = list(map(turn_to_tensor, carray[idx:idx + batch_size]))
-    
     if multi_gpu:
         backbone = backbone.module # unpackage model from DataParallel
         backbone = backbone.to(device)
@@ -201,7 +208,8 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
     print(f"embeddings shape in perform_val: {embeddings.shape}")
     with torch.no_grad():
         while idx + batch_size <= len(carray):
-            batch = torch.tensor(carray[idx:idx + batch_size][:, [2, 1, 0], :, :])
+            carray_t = paths_to_bgr_tensors(carray[idx:idx + batch_size])
+            batch = carray_t[idx:idx + batch_size]
             if tta:
                 ccropped = ccrop_batch(batch)
                 fliped = hflip_batch(ccropped)
