@@ -1,7 +1,7 @@
 import torch
 import torchvision.transforms as transforms
 import torch.nn.functional as F
-from cv2 import cv2
+import cv2
 from .verification import evaluate
 
 from datetime import datetime
