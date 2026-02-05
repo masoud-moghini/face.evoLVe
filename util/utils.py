@@ -1,7 +1,7 @@
 import torch
 import torchvision.transforms as transforms
 import torch.nn.functional as F
-
+from cv2 import cv2
 from .verification import evaluate
 
 from datetime import datetime
@@ -186,6 +186,9 @@ def gen_plot(fpr, tpr):
 
 
 def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray, issame, nrof_folds = 10, tta = True):
+    turn_to_tensor = lambda x: torch.from_numpy(cv2.imread(x))
+    carray_t = list(map(turn_to_tensor, carray[idx:idx + batch_size]))
+    
     if multi_gpu:
         backbone = backbone.module # unpackage model from DataParallel
         backbone = backbone.to(device)
@@ -195,6 +198,7 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
 
     idx = 0
     embeddings = np.zeros([len(carray), embedding_size])
+    print(f"embeddings shape in perform_val: {embeddings.shape}")
     with torch.no_grad():
         while idx + batch_size <= len(carray):
             batch = torch.tensor(carray[idx:idx + batch_size][:, [2, 1, 0], :, :])
@@ -208,7 +212,7 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
                 embeddings[idx:idx + batch_size] = l2_norm(backbone(ccropped.to(device))).cpu()
             idx += batch_size
         if idx < len(carray):
-            batch = torch.tensor(carray[idx:])
+            batch = carray_t[idx:]
             if tta:
                 ccropped = ccrop_batch(batch)
                 fliped = hflip_batch(ccropped)
@@ -218,6 +222,8 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
                 ccropped = ccrop_batch(batch)
                 embeddings[idx:] = l2_norm(backbone(ccropped.to(device))).cpu()
 
+
+    print(f"embeddings shape in perform_val after filling: {embeddings.shape}")
     tpr, fpr, accuracy, best_thresholds = evaluate(embeddings, issame, nrof_folds)
     buf = gen_plot(fpr, tpr)
     roc_curve = Image.open(buf)
