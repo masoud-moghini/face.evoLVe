@@ -163,7 +163,8 @@ ccrop = transforms.Compose([
 
 
 def ccrop_batch(imgs_tensor):
-    ccropped_imgs = torch.empty_like(imgs_tensor)
+    TARGET_TENSOR_SIZE = torch.zeros(3,112,112)
+    ccropped_imgs = torch.empty_like(TARGET_TENSOR_SIZE)
     for i, img_ten in enumerate(imgs_tensor):
         ccropped_imgs[i] = ccrop(img_ten)
 
