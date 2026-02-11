@@ -163,12 +163,11 @@ ccrop = transforms.Compose([
 
 
 def ccrop_batch(imgs_tensor):
-    TARGET_TENSOR_SIZE = torch.zeros(3,112,112)
-    ccropped_imgs = torch.empty_like(TARGET_TENSOR_SIZE)
+    ccropped_imgs = []
     for i, img_ten in enumerate(imgs_tensor):
-        ccropped_imgs[i] = ccrop(img_ten)
+        ccropped_imgs.append(ccrop(img_ten))
 
-    return ccropped_imgs
+    return torch.stack(ccropped_imgs)
 
 
 def gen_plot(fpr, tpr):
@@ -193,7 +192,7 @@ def paths_to_bgr_tensors(img_paths):
             raise ValueError(f"Could not read image: {path}") # Convert HWC → CHW and to float32 
         tensor = torch.from_numpy(img).permute(2, 1, 0).float() 
         tensors.append(tensor) 
-        return torch.stack(tensors)
+    return torch.stack(tensors)
 
 
 def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray, issame, nrof_folds = 10, tta = True):
@@ -208,9 +207,8 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
     embeddings = np.zeros([len(carray), embedding_size])
     print(f"embeddings shape in perform_val: {embeddings.shape}")
     with torch.no_grad():
-        while idx + batch_size <= len(carray):
-            carray_t = paths_to_bgr_tensors(carray[idx:idx + batch_size])
-            batch = carray_t[idx:idx + batch_size]
+        while idx + batch_size < len(carray):
+            batch = paths_to_bgr_tensors(carray[idx:idx + batch_size])
             if tta:
                 ccropped = ccrop_batch(batch)
                 fliped = hflip_batch(ccropped)
@@ -221,7 +219,6 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
                 embeddings[idx:idx + batch_size] = l2_norm(backbone(ccropped.to(device))).cpu()
             idx += batch_size
         if idx < len(carray):
-            batch = carray_t[idx:]
             if tta:
                 ccropped = ccrop_batch(batch)
                 fliped = hflip_batch(ccropped)
