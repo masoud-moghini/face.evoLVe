@@ -219,6 +219,7 @@ def perform_val(multi_gpu, device, embedding_size, batch_size, backbone, carray,
                 embeddings[idx:idx + batch_size] = l2_norm(backbone(ccropped.to(device))).cpu()
             idx += batch_size
         if idx < len(carray):
+            batch = paths_to_bgr_tensors(carray[idx:])
             if tta:
                 ccropped = ccrop_batch(batch)
                 fliped = hflip_batch(ccropped)
